@@ -1,9 +1,6 @@
-// const { expect } = require('chai');
-// const expect = require('chai').expect; 
-// ^^^^ why isn't expect recognized, and why does this supertest work without it?
+const { expect } = require('chai');
 const supertest = require('supertest');
 const app = require('../app');
-const { expect } = require('chai');
 
 
 describe('GET / endpoint', () => {
@@ -82,8 +79,6 @@ describe('GET /generate endpoint', () => {
 
         // ^^ the .include() function simply checks that each of the given values is present, but does not care if there are extra values. The .have() function, however, ensures that the values being compared are the only values present...
         expect(res.body).to.have.members([1,2,3,4,5]);
-
-
       });
   })
 });

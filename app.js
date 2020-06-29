@@ -5,10 +5,14 @@ const app = express();
 
 app.use(morgan('common'));
 
+//////////////////////////////////////////////////////
 // HANDLER GET FUNCTION ENDPOINTS
 // '/'
 // '/quotient'
-// '/generate'
+// '/generate' (notable shuffle array)
+// '/midpoint'
+//////////////////////////////////////////////////////
+
 
 // GET / ////////////////////////////
 app.get('/', (req, res) => {
@@ -126,6 +130,46 @@ app.get('/generate', (req, res) => {
 })
 
 
+// GET /midpoint ////////////////////////////
+// cut.n.paste b/c no fucking idea how to do this
+
+function toRadians(deg) {
+  return deg * (Math.PI / 180);
+}
+function toDegrees(rad) {
+  return rad * (180 / Math.PI);
+}
+
+app.get('/midpoint', (req, res) => {
+  const { lat1, lon1, lat2, lon2 } = req.query;
+
+  // for brevity the validation is skipped
+
+  // convert to radians
+  const rlat1 = toRadians(lat1);
+  const rlon1 = toRadians(lon1);
+  const rlat2 = toRadians(lat2);
+  const rlon2 = toRadians(lon2);
+
+  const bx = Math.cos(rlat2) * Math.cos(rlon2 - rlon1);
+  const by = Math.cos(rlat2) * Math.sin(rlon2 - rlon1);
+
+  const midLat = Math.atan2(
+    Math.sin(rlat1) + Math.sin(rlat2),
+    Math.sqrt(
+      (Math.cos(rlat1) + bx)
+      * (Math.cos(rlat1) + bx)
+      + by * by
+    )
+  );
+  const midLon = rlon1 + Math.atan2(by, Math.cos(rlat1) + bx);
+  
+  res.json({
+    lat: toDegrees(midLat),
+    lon: toDegrees(midLon)
+  })
+
+})
 
 module.exports = app;
 
