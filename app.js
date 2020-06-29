@@ -5,12 +5,19 @@ const app = express();
 
 app.use(morgan('common'));
 
+// HANDLER GET FUNCTION ENDPOINTS
+// '/'
+// '/quotient'
+// '/generate'
+
+// GET / ////////////////////////////
 app.get('/', (req, res) => {
   res
     .status(200)
     .send('Hello Express!');
 });
 
+// GET /quotient ////////////////////////////
 app.get('/quotient', (req, res) => {
   const { a, b } = req.query
 
@@ -46,8 +53,79 @@ app.get('/quotient', (req, res) => {
 
   res
     .send(`${a} divided by ${b} is ${ans}`);
+});
 
+
+// GET /generate ////////////////////////////
+app.get('/generate', (req, res) => {
+
+  const { n } = req.query
+
+  // coerce n to a numeric value
+
+  const num = parseInt(n)
+
+  if (isNaN(num)) {
+    return res 
+      .status(400)
+      .send('Invalid request');
+  }
+
+
+  // Generate inital array within scope [1, .., n]
+  // Then shuffle that array (randomly)
+
+  // MAKE ARRAY v1 ///////////////////////
+  // my old skoool version
+  // const arr = [];
+  // for(let i = 1; i <= num; i++) {
+  //   arr.push(i);
+  // }
+
+  // MAKE ARRAY v2 ///////////////////////
+  // thinkful version 
+  const arr = new Array(num) // an Array constructor: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array
+    .fill(1)
+    .map((_, i) => i + 1);
+  // console.log(arr);
+
+
+  // SHUFFLE ARRAY v1 ///////////////////////
+  // Fischer-Yates Shuffle, aka in-place O(n) shuffle
+  // src: https://bost.ocks.org/mike/shuffle/
+  // 
+  // function shuffle(array) {
+  //   var m = array.length, t, i;
+  //   // While there are remaining elements to shuffle...
+  //   while (m) {
+  //     // Pick a remaining element...
+  //     i = Math.floor(Math.random() * m--);
+  //     // and swap it with the current element
+  //     t = array[m];
+  //     array[m] = array[i];
+  //     array[i] = t;
+  //   }
+  //   return array;
+  // }
+  // shuffle(arr);
+
+  // SHUFFLE ARRAY v2 ///////////////////////
+  // thinkful version, same same but different
+  arr.forEach((e, i) => {
+    let ran = Math.floor(Math.random() * num);
+    let temp = arr[i];
+    arr[i] = arr[ran];
+    arr[ran] = temp;
+  })
+
+  // console.log(arr);
+
+  res
+    .status(200)
+    .json(arr);
 })
+
+
 
 module.exports = app;
 
