@@ -204,8 +204,8 @@ app.get('/frequency', (req, res) => {
       return acc;
     }, {});
 
-  const unique = Object.keys(counts).length;
-  const average = s.length / unique;
+  const count = Object.keys(counts).length;
+  const average = s.length / count;
   let highest = '';
   let highestVal = 0;
 
@@ -216,7 +216,7 @@ app.get('/frequency', (req, res) => {
     }
   });
 
-  counts.unique = unique;
+  counts.count = count;
   counts.average = average;
   counts.highest = highest;
   res.json(counts);
