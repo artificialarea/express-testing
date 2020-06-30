@@ -6,7 +6,7 @@ const { request } = require('../app');
 
 describe('GET /frequency endpoint', () => {
 
-  it('can\'t be arsed right now to do any others', () => {
+  it.skip ('can\'t be arsed to do any other tests.', () => {
   
   });
 
