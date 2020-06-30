@@ -6,11 +6,12 @@ const app = express();
 app.use(morgan('common'));
 
 //////////////////////////////////////////////////////
-// HANDLER GET FUNCTION ENDPOINTS
-// '/'
-// '/quotient'
-// '/generate' (notable shuffle array)
-// '/midpoint'
+// HANDLER FUNCTION ENDPOINTS BELOW
+// GET /
+// GET /quotient
+// GET /generate (notable shuffle array)
+// GET /midpoint
+// GET /frequency
 //////////////////////////////////////////////////////
 
 
@@ -170,6 +171,62 @@ app.get('/midpoint', (req, res) => {
   })
 
 })
+
+
+// GET /frequency /////////////////////////////
+app.get('/frequency', (req, res) => {
+  const { s } = req.query;
+
+  // return object is this format:
+  /*  {                 // within the string...
+        count: 2,       // the total number of distinct characters
+        average: 5,     // the average frequency
+        highest: 'a',   // the character with the highest frequency. if tie, letter closest to the beginning of the alphabet
+        'a': 6,         // frequency of occurrence of each character
+        'b': 4
+      }   */
+
+  if (!s) {
+    return res
+      .status(400)
+      .send('Invalid request')
+  }
+  
+  const counts = s
+    .toLowerCase()
+    .split('')
+    .reduce((acc, curr) => {
+      if (acc[curr]) {
+        acc[curr]++;
+      } else {
+        acc[curr] = 1;
+      }
+      return acc;
+    }, {});
+
+  const unique = Object.keys(counts).length;
+  const average = s.length / unique;
+  let highest = '';
+  let highestVal = 0;
+
+  Object.keys(counts).forEach(k => {
+    if (counts[k] > highestVal) {
+      highestVal = counts[k];
+      highest = k;
+    }
+  });
+
+  counts.unique = unique;
+  counts.average = average;
+  counts.highest = highest;
+  res.json(counts);
+});
+
+
+
+
+
+
 
 module.exports = app;
 
