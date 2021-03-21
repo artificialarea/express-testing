@@ -1,4 +1,5 @@
-## testing express applications with mocha, chai, and supertest
+## Express Testing
+_Express application to explore testing with Mocha, Chai and SuperTest_
 
 per: https://courses.thinkful.com/node-postgres-v1/checkpoint/5#testing-express-applications
 
